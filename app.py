@@ -34,7 +34,7 @@ def process_data(file):
     if file is not None:
         raw_df = pd.read_csv(file)
     else:
-        raw_df = pd.read_csv("data/cleaned_sales.csv")
+        raw_df = pd.read_csv("Data/cleaned_sales.csv")
     
     # Standardize column names (lowercase, stripped spaces)
     raw_df.columns = raw_df.columns.str.strip().str.lower().str.replace(' ', '_')
