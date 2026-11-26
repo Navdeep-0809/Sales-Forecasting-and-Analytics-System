@@ -1,29 +1,69 @@
-# 📈 Enterprise AI Sales Forecasting & Analytics System
+# Sales Forecasting and Analytics System
 
-An end-to-end Machine Learning web application built with **Python**, **Streamlit**, and **XGBoost**. This system converts raw enterprise transaction logs into real-time predictive revenue insights, future demand projections, interactive promotional "What-If" simulations, and automated inventory reorder alerts.
+An interactive sales analytics dashboard and forecasting application built with Python, Streamlit, and XGBoost. It analyzes historical sales data, displays model predictions, and supports scenario planning and future revenue projections.
 
----
+## Features
 
-## 🌟 Key Features
+- **Sales data ingestion:** Use the included cleaned dataset or upload a custom CSV.
+- **Flexible CSV mapping:** Normalize column names; detect common sales/revenue columns or calculate sales from `units_sold` and `unit_price`; parse mixed date formats.
+- **Sales analytics dashboard:** View total revenue, average daily revenue, predicted revenue, and variance for the selected date range.
+- **Category and date filtering:** Filter dashboard results by product category and historical date range.
+- **Time-series features:** Aggregate sales by day and generate calendar fields, 1/7/30-day sales lags, and 7/30-day rolling means.
+- **Revenue forecasting:** Apply the pre-trained XGBoost model to historical feature data and compare actual sales with model predictions.
+- **30-day forecast:** Generate an interactive projection for the 30 days after the latest available sales date.
+- **What-if scenarios:** Adjust the promotional boost slider to see its effect on predicted sales.
+- **Inventory demand alerts:** Compare projected sales with the historical average and show high-demand, low-demand, or stable-demand guidance.
+- **Model training workflow:** Prepare data, engineer time-series features, train an XGBoost regressor, and evaluate it with RMSE, MAE, and MAPE.
 
-* **Dynamic Data Ingestion Engine:** Upload any custom sales CSV file. The system automatically standardizes column headers, handles mixed date formats on the fly, and computes lag and rolling temporal features dynamically.
-* **Interactive Filtering & Analytics:** Filter revenue metrics, average daily sales, and line trends dynamically by date range and product categories.
-* **XGBoost Forecasting Model:** Uses pre-engineered lag features (`sales_lag_1`, `sales_lag_7`, `sales_lag_30`) and rolling averages (`rolling_mean_7`, `rolling_mean_30`) to forecast future demand accurately.
-* **🔮 30-Day Automated Future Projection Engine:** Generates interactive multi-day future trendlines and computes projected total revenue for the upcoming month.
-* **🎯 What-If Scenario Planner:** Simulate promotional lifts and marketing boosts in real time using interactive UI sliders to project expected revenue variance.
-* **⚠️ Automated Inventory Alert System:** Evaluates predicted revenue against baseline averages to flag inventory stockout warnings or low-demand promotion windows.
+## Tech Stack
 
----
+- **Python** — application and data-processing language
+- **Streamlit** — interactive web dashboard
+- **Pandas and NumPy** — CSV handling, aggregation, feature engineering, and numerical operations
+- **XGBoost** — sales regression and forecasting model
+- **scikit-learn** — model evaluation metrics during training
+- **Joblib** — serialization and loading of the trained model
+- **Plotly Express and Plotly Graph Objects** — interactive charts
 
-## 📁 Repository Structure
+## Run the application
 
-text
-├── data/
-│   ├── cleaned_sales.csv            # Default dataset fallback
-│   └── train.csv                    # Training dataset
-├── models/
-│   └── xgboost_sales_model.pkl      # Pre-trained XGBoost regression model
-├── app.py                           # Main Streamlit application
-├── requirements.txt                 # Application dependencies
-├── .gitignore                       # System and environment file exclusions
-└── README.md                        # Project documentation
+Python 3.11 is used by the included development-container configuration.
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m streamlit run app.py
+```
+
+Open the local URL printed by Streamlit (by default, `http://localhost:8501`).
+
+The dashboard loads `Data/cleaned_sales.csv` and `models/xgboost_sales_model.pkl` by default. To use a different dataset, upload a CSV from the sidebar. It must include an `order_date` column and a sales/revenue column, or both `units_sold` and `unit_price`.
+
+## Data and model workflow
+
+The scripts under `src/` provide the data preparation and training workflow:
+
+1. `preprocess.py` standardizes column names, parses dates, sorts records, and fills missing numeric values.
+2. `feature_engineering.py` aggregates daily sales and creates calendar, lag, and rolling-average features.
+3. `train_model.py` trains and evaluates an XGBoost regression model and saves it to `models/xgboost_sales_model.pkl`.
+
+The training script expects the corresponding cleaned and featured CSV files to be present under `Data/`.
+
+## Repository structure
+
+```text
+Data/
+  train.csv
+  cleaned_sales.csv
+  featured_sales.csv
+models/
+  xgboost_sales_model.pkl
+src/
+  preprocess.py
+  feature_engineering.py
+  train_model.py
+app.py
+requirements.txt
+README.md
+```

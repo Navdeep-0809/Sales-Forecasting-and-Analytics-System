@@ -31,11 +31,11 @@ def create_time_features(df):
 
     return daily_sales
 
-if __name__ == "__main__":
+if __name__ == "__main__":   
     # Load cleaned data
     df = pd.read_csv("data/cleaned_sales.csv")
     df['order_date'] = pd.to_datetime(df['order_date'])
-
+   
     # Build features
     features_df = create_time_features(df)
 
